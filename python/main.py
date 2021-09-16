@@ -44,6 +44,11 @@ def Analizar():
     scanner.analizar(cadena)
     scanner.impTokens()
     scanner.impErrores()
+
+def HTML():
+    global van
+    pass
+
             
 
 

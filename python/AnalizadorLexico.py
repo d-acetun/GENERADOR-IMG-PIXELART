@@ -4,6 +4,11 @@ from Error import Error
 from prettytable import PrettyTable
 token_color=[]
 contador_color=0
+btitulo = False
+bancho = False
+balto = False
+bceldas = False
+vancho=0
 
 for a in range(48,58):
     token_color.append(chr(a))
@@ -31,6 +36,7 @@ class AnalizadorLexico:
         self.buffer=''
 
     def estado0(self,caracter):
+        global btitulo
         '''Estado 0'''
         #Elementos del token Color
 
@@ -46,6 +52,13 @@ class AnalizadorLexico:
             self.agregar_token(caracter,'llave_izquierda',self.linea,self.columna)
             self.buffer = ''
             self.columna+=1
+
+
+        elif caracter == ',':
+            self.agregar_token(caracter,'coma',self.linea,self.columna)
+            self.buffer = ''
+            self.columna+=1
+
 
         elif caracter == '}':
             self.agregar_token(caracter,'llave_derecha',self.linea,self.columna)
@@ -74,7 +87,6 @@ class AnalizadorLexico:
 
         #Transicion para estado 1
         elif caracter.isdigit():
-            print('si entra')
             self.buffer += caracter
             self.columna+=1
             self.estado = 1
@@ -104,6 +116,7 @@ class AnalizadorLexico:
             self.estado=30 
         #Transicion estado 72, 
         elif caracter == 'T':
+            btitulo=True
             self.buffer += caracter
             self.columna+=1
             self.estado=72
@@ -154,10 +167,13 @@ class AnalizadorLexico:
 
     def estado1(self,caracter):
         if caracter.isdigit():
-            print('estad 1')
+            
             self.buffer+=caracter
             self.columna+=1
         else:
+            if bancho==True:
+                vancho=self.buffer
+                pass
             self.agregar_token(self.buffer,'entero',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
@@ -711,12 +727,13 @@ class AnalizadorLexico:
             self.estado=0
 
     def estado43(self,caracter):
-                
+        global bancho        
         if caracter =='O':
             self.buffer += caracter
             self.agregar_token(self.buffer,'PALABRA RESERVADA',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+            bancho=True
         else:
             self.buffer += caracter
             self.agregar_error(self.buffer,self.linea,self.columna)
@@ -854,6 +871,198 @@ class AnalizadorLexico:
             self.columna += 1
             self.estado=0
 
+
+    def estado78(self,caracter):
+                
+        if caracter =='L':
+            self.buffer += caracter
+            self.estado = 79
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+    
+    def estado79(self,caracter):
+                
+        if caracter =='S':
+            self.buffer += caracter
+            self.estado = 80
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+    
+
+    def estado80(self,caracter):
+                
+        if caracter =='E':
+            self.buffer += caracter
+            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.estado = 0
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+    
+    def estado57(self,caracter):
+                
+        if caracter =='O':
+            self.buffer += caracter
+            self.estado = 58
+            self.columna+=1
+
+        elif caracter =='E':
+            self.buffer += caracter
+            self.estado = 65
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado58(self,caracter):
+                
+        if caracter =='L':
+            self.buffer += caracter
+            self.estado = 59
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado59(self,caracter):
+                
+        if caracter =='U':
+            self.buffer += caracter
+            self.estado = 60
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado60(self,caracter):
+                
+        if caracter =='M':
+            self.buffer += caracter
+            self.estado = 61
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado61(self,caracter):
+                
+        if caracter =='N':
+            self.buffer += caracter
+            self.estado = 62
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado62(self,caracter):
+                
+        if caracter =='A':
+            self.buffer += caracter
+            self.estado = 63
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado63(self,caracter):
+                
+        if caracter =='S':
+            self.buffer += caracter
+            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.estado = 0
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado65(self,caracter):
+                
+        if caracter =='L':
+            self.buffer += caracter
+            self.estado = 66
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado66(self,caracter):
+                
+        if caracter =='D':
+            self.buffer += caracter
+            self.estado = 67
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado67(self,caracter):
+                
+        if caracter =='A':
+            self.buffer += caracter
+            self.estado = 68
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
+    def estado68(self,caracter):
+                
+        if caracter =='S':
+            self.buffer += caracter
+            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.estado = 0
+            self.columna+=1
+        else:
+            self.buffer += caracter
+            self.agregar_error(self.buffer,self.linea,self.columna)
+            self.buffer = ''
+            self.columna += 1
+            self.estado=0
+
     def analizar(self, cadena):
         '''Analiza léxicamente una cadena'''
         #inicializar listas nuevamente
@@ -936,10 +1145,60 @@ class AnalizadorLexico:
                 self.estado76(cadena[self.i])
             elif self.estado == 70:
                 self.estado70(cadena[self.i])
-              
-
-            
-            
+            elif self.estado == 40:
+                self.estado40(cadena[self.i])
+            elif self.estado == 41:
+                self.estado41(cadena[self.i])  
+            elif self.estado == 42:
+                self.estado42(cadena[self.i])
+            elif self.estado == 43:
+                self.estado43(cadena[self.i])
+            elif self.estado == 45:
+                self.estado45(cadena[self.i])
+            elif self.estado == 46:
+                self.estado46(cadena[self.i])
+            elif self.estado == 48:
+                self.estado48(cadena[self.i])
+            elif self.estado == 49:
+                self.estado49(cadena[self.i])
+            elif self.estado == 50:
+                self.estado50(cadena[self.i])
+            elif self.estado == 51:
+                self.estado51(cadena[self.i])
+            elif self.estado == 53:
+                self.estado53(cadena[self.i])
+            elif self.estado == 54:
+                self.estado54(cadena[self.i])
+            elif self.estado == 55:
+                self.estado55(cadena[self.i])
+            elif self.estado == 78:
+                self.estado78(cadena[self.i])
+            elif self.estado == 79:
+                self.estado79(cadena[self.i])
+            elif self.estado == 80:
+                self.estado80(cadena[self.i])
+            elif self.estado == 57:
+                self.estado57(cadena[self.i])
+            elif self.estado == 58:
+                self.estado58(cadena[self.i])
+            elif self.estado == 59:
+                self.estado59(cadena[self.i])
+            elif self.estado == 60:
+                self.estado60(cadena[self.i])
+            elif self.estado == 61:
+                self.estado61(cadena[self.i])
+            elif self.estado == 62:
+                self.estado62(cadena[self.i])
+            elif self.estado == 63:
+                self.estado63(cadena[self.i])
+            elif self.estado == 65:
+                self.estado65(cadena[self.i])
+            elif self.estado == 66:
+                self.estado66(cadena[self.i])
+            elif self.estado == 67:
+                self.estado67(cadena[self.i])
+            elif self.estado == 68:
+                self.estado68(cadena[self.i])
             self.i += 1
                     
 
