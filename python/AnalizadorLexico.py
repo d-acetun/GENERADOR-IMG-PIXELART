@@ -1,14 +1,18 @@
+from tkinter import Variable
 from tkinter.constants import INSIDE
 from Token import Token
 from Error import Error
 from prettytable import PrettyTable
+from Funciones import *
 token_color=[]
 contador_color=0
 btitulo = False
 bancho = False
 balto = False
 bceldas = False
-vancho=0
+cel=0; col=0; boo=False; color=0 #cel representa filas
+ContadorCol=0
+
 
 for a in range(48,58):
     token_color.append(chr(a))
@@ -16,8 +20,15 @@ for a in range(65,71):
     token_color.append(chr(a))
 
 class AnalizadorLexico:
-    
+    vancho=0
+    valto=0
+    vfilas=0
+    vcolumnas=0
+    Filtros=[]
+    Celdas=[]
+    Contador=0
     def __init__(self):
+        
         self.listaTokens = []
         self.listaErrores = []
         self.linea = 1
@@ -36,6 +47,7 @@ class AnalizadorLexico:
         self.buffer=''
 
     def estado0(self,caracter):
+        global bceldas, color, boo, col, cel
         global btitulo
         '''Estado 0'''
         #Elementos del token Color
@@ -49,6 +61,8 @@ class AnalizadorLexico:
             self.columna+=1
         
         elif caracter == '{':
+           
+            bceldas=True
             self.agregar_token(caracter,'llave_izquierda',self.linea,self.columna)
             self.buffer = ''
             self.columna+=1
@@ -64,6 +78,7 @@ class AnalizadorLexico:
             self.agregar_token(caracter,'llave_derecha',self.linea,self.columna)
             self.buffer = ''
             self.columna+=1
+            bceldas=False
 
         elif caracter == '=':
             self.agregar_token(caracter,'igual',self.linea,self.columna)
@@ -79,6 +94,7 @@ class AnalizadorLexico:
             self.agregar_token(caracter,'corchete_derecho',self.linea,self.columna)
             self.buffer = ''
             self.columna+=1
+            AnalizadorLexico.Celdas.append([cel, col, boo, color])
 
         elif caracter == ';':
             self.agregar_token(caracter,'coma',self.linea,self.columna)
@@ -166,14 +182,36 @@ class AnalizadorLexico:
 
 
     def estado1(self,caracter):
+        global bceldas
+        global col, cel, ContadorCol
         if caracter.isdigit():
-            
             self.buffer+=caracter
             self.columna+=1
         else:
-            if bancho==True:
-                vancho=self.buffer
-                pass
+            if bceldas == True and ContadorCol==0:
+               cel=self.buffer
+               ContadorCol+=1
+            elif bceldas == True and ContadorCol==1:
+                col = self.buffer
+                ContadorCol=0
+
+            if AnalizadorLexico.Contador==0:
+                AnalizadorLexico.vancho=self.buffer
+                AnalizadorLexico.Contador+=1
+                
+                                
+            elif AnalizadorLexico.Contador==1:
+                AnalizadorLexico.valto=self.buffer
+                AnalizadorLexico.Contador+=1
+
+            elif AnalizadorLexico.Contador==2:
+                AnalizadorLexico.vfilas=self.buffer
+                AnalizadorLexico.Contador+=1
+
+            elif AnalizadorLexico.Contador==3:
+                AnalizadorLexico.vcolumnas=self.buffer
+                AnalizadorLexico.Contador+=1
+
             self.agregar_token(self.buffer,'entero',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
@@ -280,15 +318,18 @@ class AnalizadorLexico:
 
     def estado8(self,caracter):
         global token_color
-        global contador_color
+        global contador_color, color, bceldas
         
         
 
         if caracter in token_color:
             self.buffer += caracter
+            if bceldas==True:
+                color = self.buffer
             self.agregar_token(self.buffer,'color',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+            
             
 
             
@@ -604,12 +645,16 @@ class AnalizadorLexico:
             self.estado=0
 
     def estado35(self,caracter):
-                
+        global bceldas, boo          
         if caracter =='E':
             self.buffer += caracter
+            if bceldas==True:
+                boo = self.buffer
             self.agregar_token(self.buffer,'BOLEANO',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+
+            
         else:
             self.buffer += caracter
             self.agregar_error(self.buffer,self.linea,self.columna)
@@ -900,12 +945,15 @@ class AnalizadorLexico:
     
 
     def estado80(self,caracter):
-                
+        global bceldas, boo        
         if caracter =='E':
             self.buffer += caracter
+            if bceldas==True:
+                boo = self.buffer
             self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+            
         else:
             self.buffer += caracter
             self.agregar_error(self.buffer,self.linea,self.columna)
@@ -1064,6 +1112,7 @@ class AnalizadorLexico:
             self.estado=0
 
     def analizar(self, cadena):
+        
         '''Analiza léxicamente una cadena'''
         #inicializar listas nuevamente
         self.listaTokens = []
@@ -1203,6 +1252,8 @@ class AnalizadorLexico:
                     
 
     def impTokens(self):
+        
+        
         x = PrettyTable()
         x.field_names = ["Lexema", "Token", "Fila", "Columna"]
         for i in self.listaTokens:
@@ -1218,3 +1269,5 @@ class AnalizadorLexico:
             for i in self.listaErrores:
                 x.add_row(i.enviarData())
             print(x)
+
+    
