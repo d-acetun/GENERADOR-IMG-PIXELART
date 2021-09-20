@@ -1,5 +1,5 @@
 from tkinter import Variable
-from tkinter.constants import INSIDE
+from tkinter.constants import INSIDE, NO
 from Token import Token
 from Error import Error
 from prettytable import PrettyTable
@@ -26,7 +26,7 @@ class AnalizadorLexico:
     vcolumnas=0
     Filtros=[]
     Celdas=[]
-    Contador=0
+    Contador=0; titulo =''
     def __init__(self):
         
         self.listaTokens = []
@@ -37,6 +37,7 @@ class AnalizadorLexico:
         self.estado = 0
         self.i = 0
 
+    
     def agregar_token(self,caracter,token,linea,columna):
         self.listaTokens.append(Token(caracter,token,linea,columna))
         self.buffer = ''
@@ -719,9 +720,11 @@ class AnalizadorLexico:
                 
         if caracter =='"':
             self.buffer += caracter
+            AnalizadorLexico.titulo=self.buffer
             self.agregar_token(self.buffer,'TITULO IMAGEN',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+            
         else:
             self.buffer += caracter
             self.columna+=1
@@ -1257,8 +1260,9 @@ class AnalizadorLexico:
         x = PrettyTable()
         x.field_names = ["Lexema", "Token", "Fila", "Columna"]
         for i in self.listaTokens:
+            print(i.enviar())
             x.add_row(i.enviarData())
-        print(x)
+        # print(x)
 
     def impErrores(self):
         x = PrettyTable()
@@ -1268,6 +1272,49 @@ class AnalizadorLexico:
         else:
             for i in self.listaErrores:
                 x.add_row(i.enviarData())
+                
             print(x)
 
-    
+    def RTokens(self):
+        Nombre=AnalizadorLexico.titulo.replace('"','')
+        Nombre='Tokens'+Nombre+'.html'
+        reporte = open(Nombre, 'w')
+        reporte.write('<html>')
+        reporte.write('     <head>')
+        reporte.write('<style type="text/css">')
+        reporte.write('table, th, td {')
+
+        reporte.write('border: 1px solid black;')
+        reporte.write('border-collapse: collapse;;')
+        reporte.write('}')
+        reporte.write('</style>')
+
+        reporte.write('<title>''TOKENS''</title>')
+        reporte.write('<body>')
+        reporte.write('<h1 style="text-align: center;">' 'REPORTE DE TOKENS '+AnalizadorLexico.titulo+ '</h1>')
+
+        reporte.write('<table style="margin: 0 auto; width:50%">')
+        reporte.write('<tr>')
+        reporte.write('<th>' 'LEXEMA' '</th>')
+        reporte.write('<th>' 'TOKEN' '</th>')
+        reporte.write('<th>' 'FILA' '</th>')
+        reporte.write('<th>' 'COLUMNA' '</th>')
+        reporte.write('</tr>')
+
+        for i in self.listaTokens:
+            reporte.write('<tr>')
+
+            reporte.write('<td>' +i.enviarLexema()+ '</td>')
+            reporte.write('<td>' +i.enviarTipo()+ '</td>')
+            reporte.write('<td>' +str(i.enviarLinea())+ '</td>')
+            reporte.write('<td>' +str(i.enviarColumna())+ '</td>')
+
+
+            reporte.write('</tr>')
+
+        reporte.write('</table>')
+
+        reporte.write('</head>')
+        reporte.write('</body>')
+        reporte.write('</html>')
+        

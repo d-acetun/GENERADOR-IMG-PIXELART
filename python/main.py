@@ -5,6 +5,7 @@ from tkinter.font import Font
 import easygui
 from AnalizadorLexico import *
 from Funciones import *
+from tkinter import messagebox as MessageBox
 AnchoCelda=0.0
 AltoCelda=0.0
 archivo=''
@@ -39,7 +40,7 @@ def Leer():
 
 def Analizar():
     global archivo
-   
+    # MessageBox.showinfo("Hola!", "Hola mundo")
    
     scanner = AnalizadorLexico()
     cadena = Leer()
@@ -53,6 +54,7 @@ def Analizar():
         Fila=AnalizadorLexico.Celdas[c3][0]
         Columna=AnalizadorLexico.Celdas[c3][1]
         Celda = Fila+Columna
+    scanner.RTokens()
         
     
 
@@ -65,8 +67,10 @@ def HTML():
     # print(AnchoCelda)
     # print(AltoCelda)
 
-
-    reporte = open('img.html', 'w')
+    titulo=AnalizadorLexico.titulo.replace('"', '')
+    img=titulo+'original.jpg'
+    titulo='_'+titulo+' original.html'
+    reporte = open(titulo, 'w')
     reporte.write('<html>')
     reporte.write('     <head>')
     reporte.write('<style type="text/css">')
@@ -80,7 +84,7 @@ def HTML():
     reporte.write('<title>''REPORTE''</title>')
     reporte.write('<body>')
 
-    reporte.write('<h1 style="text-align: center;">' 'IMGAGEN 1 ' '</h1>')
+    reporte.write('<h1 style="text-align: center;">' +AnalizadorLexico.titulo+ '</h1>')
     
     reporte.write(f'<table style="margin: 0 auto;">')
     
@@ -117,7 +121,31 @@ def HTML():
     reporte.write('</table>')
 
 
+    
+    reporte.write('</body>')
+    reporte.write('</html>')
+    import imgkit
+    opciones = { 'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150 }
+    config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
 
+    imgkit.from_file(titulo, img,config=config, options = opciones)
+
+    titulo=AnalizadorLexico.titulo.replace('"', '')
+    img=titulo+'MIRRORX.jpg'
+    titulo='_'+titulo+' MIRRORX.html'
+    reporte = open(titulo, 'w')
+    reporte.write('<html>')
+    reporte.write('     <head>')
+    reporte.write('<style type="text/css">')
+    reporte.write('table, th, td {')
+
+    reporte.write('border: 1px solid black;')
+    reporte.write('border-collapse: collapse;;')
+    reporte.write('}')
+    reporte.write('</style>')
+
+    reporte.write('<title>''REPORTE''</title>')
+    reporte.write('<body>')
     reporte.write('<h1 style="text-align: center;">' 'MIRROR X' '</h1>')
     
     reporte.write(f'<table style="margin: 0 auto;">')
@@ -156,9 +184,31 @@ def HTML():
 
     reporte.write('</table>')
 
+    reporte.write('</head>')
+    reporte.write('</body>')
+    reporte.write('</html>')
+    import imgkit
+    opciones = { 'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150 }
+    config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
 
+    imgkit.from_file(titulo, img,config=config, options = opciones)
 
+    titulo=AnalizadorLexico.titulo.replace('"', '')
+    img=titulo+'MIRRORY.jpg'
+    titulo='_'+titulo+' MIRRORY.html'
+    reporte = open(titulo, 'w')
+    reporte.write('<html>')
+    reporte.write('     <head>')
+    reporte.write('<style type="text/css">')
+    reporte.write('table, th, td {')
 
+    reporte.write('border: 1px solid black;')
+    reporte.write('border-collapse: collapse;;')
+    reporte.write('}')
+    reporte.write('</style>')
+
+    reporte.write('<title>''REPORTE''</title>')
+    reporte.write('<body>')
     reporte.write('<h1 style="text-align: center;">' 'MIRROR Y' '</h1>')
     
     reporte.write(f'<table style="margin: 0 auto;">')
@@ -194,8 +244,31 @@ def HTML():
         PosicionFila=0
     
     reporte.write('</table>')
+    reporte.write('</head>')
+    reporte.write('</body>')
+    reporte.write('</html>')
+    import imgkit
+    opciones = { 'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150 }
+    config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
 
+    imgkit.from_file(titulo, img,config=config, options = opciones)
 
+    titulo=AnalizadorLexico.titulo.replace('"', '')
+    img=titulo+'DOUBLEMIRROR.jpg'
+    titulo='_'+titulo+' DOUBLEMIRROR.html'
+    reporte = open(titulo, 'w')
+    reporte.write('<html>')
+    reporte.write('     <head>')
+    reporte.write('<style type="text/css">')
+    reporte.write('table, th, td {')
+
+    reporte.write('border: 1px solid black;')
+    reporte.write('border-collapse: collapse;;')
+    reporte.write('}')
+    reporte.write('</style>')
+
+    reporte.write('<title>''REPORTE''</title>')
+    reporte.write('<body>')
     reporte.write('<h1 style="text-align: center;">' 'DOUBLE MIRROR' '</h1>')
     
     reporte.write(f'<table style="margin: 0 auto;">')
@@ -236,8 +309,36 @@ def HTML():
     reporte.write('</head>')
     reporte.write('</body>')
     reporte.write('</html>')
+    import imgkit
+    opciones = { 'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150 }
+    config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+
+    imgkit.from_file(titulo, img,config=config, options = opciones)
 
 
+
+    reporte = open('Tokens'+AnalizadorLexico.titulo+'.html', 'w')
+    reporte.write('<html>')
+    reporte.write('     <head>')
+    reporte.write('<style type="text/css">')
+    reporte.write('table, th, td {')
+
+    reporte.write('border: 1px solid black;')
+    reporte.write('border-collapse: collapse;;')
+    reporte.write('}')
+    reporte.write('</style>')
+
+    reporte.write('<title>''TOKENS''</title>')
+    reporte.write('<body>')
+    reporte.write('<h1 style="text-align: center;">' 'REPORTE DE TOKENS '+AnalizadorLexico.titulo+ '</h1>')
+
+    reporte.write('<table style="margin: 0 auto; width:50%">')
+    reporte.write('<tr>')
+    reporte.write('<th>' 'LEXEMA' '</th>')
+    reporte.write('<th>' 'TOKEN' '</th>')
+    reporte.write('<th>' 'FILA' '</th>')
+    reporte.write('<th>' 'COLUMNA' '</th>')
+    reporte.write('</tr>')
 # global valto
 # global vfilas, vcolumnas
     

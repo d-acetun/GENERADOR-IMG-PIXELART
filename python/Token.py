@@ -11,3 +11,14 @@ class Token:
 
     def enviarData(self):
         return [self.lexema, self.tipo, self.linea, self.columna]
+
+    def enviarLexema(self):
+        return self.lexema
+    def enviarTipo(self):
+        return self.tipo
+
+    def enviarLinea(self):
+        return self.linea
+
+    def enviarColumna(self):
+        return self.columna       
