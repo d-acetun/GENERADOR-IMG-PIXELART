@@ -28,7 +28,13 @@ class AnalizadorLexico:
     Celdas=[]
     Contador=0; titulo =''
     def __init__(self):
-        
+        AnalizadorLexico.vancho=0
+        AnalizadorLexico.valto=0
+        AnalizadorLexico.vfilas=0
+        AnalizadorLexico.vcolumnas=0
+        AnalizadorLexico.Filtros=[]
+        AnalizadorLexico.Celdas=[]
+        AnalizadorLexico.Contador=0; AnalizadorLexico.titulo =''
         self.listaTokens = []
         self.listaErrores = []
         self.linea = 1
