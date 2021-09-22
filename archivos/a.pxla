@@ -1,4 +1,4 @@
-TITULO="Pokeball"; 
+TITULO="Pokeball";?X
         ANCHO=300;
         ALTO=300;
         FILAS=12;
@@ -122,7 +122,7 @@ TITULO="Pokeball";
 		@@@@
 
 TITULO="Hongo";
-        ANCHO=320;
+        ANCHO=320;!W
         ALTO=320;
         FILAS=16;
         COLUMNAS=16;

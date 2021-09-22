@@ -9,6 +9,7 @@ from tkinter import messagebox as MessageBox
 from PIL import ImageTk, Image
 from tkinter import ttk
 import time
+import os
 AnchoCelda = 0.0
 AltoCelda = 0.0
 archivo = ''
@@ -26,16 +27,20 @@ def MIRRORY():
     global combo
     global ListaTitulos
     # print(combo.get())
-    if combo.get()!='':
-        for i in range(len(ListaTitulos)):
-            if combo.get()==ListaTitulos[i]:
-                ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}MIRRORY.jpg'
-    
-    
-        imagen = ImageTk.PhotoImage(Image.open(ruta))
+    try:
+        if combo.get()!='':
+            for i in range(len(ListaTitulos)):
+                if combo.get()==ListaTitulos[i]:
+                    ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}MIRRORY.jpg'
         
-        label.configure(image=imagen)
-        label.image=imagen
+        
+            imagen = ImageTk.PhotoImage(Image.open(ruta))
+            
+            label.configure(image=imagen)
+            label.image=imagen
+    except:
+        MessageBox.showinfo('IMAGEN', 'FILTRO NO DISPONIBLE')
+
 
     # ventana(f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\PokeballMIRRORY.jpg')
 
@@ -51,14 +56,14 @@ def MIRRORX():
             for i in range(len(ListaTitulos)):
                 if combo.get()==ListaTitulos[i]:
                     ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}MIRRORX.jpg'
-        
+                    # os.path.isfile(ruta)
         
             imagen = ImageTk.PhotoImage(Image.open(ruta))
             
             label.configure(image=imagen)
             label.image=imagen
     except:
-        MessageBox.showinfo('IMAGEN', 'NO SE PUDO CARGAR LA IMAGEN')
+        MessageBox.showinfo('IMAGEN', 'FILTRO NO DISPONIBLE')
 
 def original():
     global raiz
@@ -77,7 +82,7 @@ def original():
             
             label.configure(image=imagen)
             label.image=imagen
-            MessageBox.showinfo('MENSAJE', 'IMAGEN CARGADA CON EXITO')
+            # MessageBox.showinfo('MENSAJE', 'IMAGEN CARGADA CON EXITO')
     except:
         MessageBox.showinfo('MENSAJE', 'OCURRIÓ UN ERROR AL MOSTRAR LA IMAGEN')
 
@@ -87,16 +92,20 @@ def DOUBLEMIRROR():
     global combo
     global ListaTitulos
     print(combo.get())
-    if combo.get()!='':
-        for i in range(len(ListaTitulos)):
-            if combo.get()==ListaTitulos[i]:
-                ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}DOUBLEMIRROR.jpg'
-    
-    
-        imagen = ImageTk.PhotoImage(Image.open(ruta))
+    try:
+
+        if combo.get()!='':
+            for i in range(len(ListaTitulos)):
+                if combo.get()==ListaTitulos[i]:
+                    ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}DOUBLEMIRROR.jpg'
         
-        label.configure(image=imagen)
-        label.image=imagen
+        
+            imagen = ImageTk.PhotoImage(Image.open(ruta))
+            
+            label.configure(image=imagen)
+            label.image=imagen
+    except:
+        MessageBox.showinfo('IMAGEN', 'FILTRO NO DISPONIBLE')
 def Cargar():
     global Ruta
     try:
@@ -130,16 +139,24 @@ def Analizar():
     AnalizadorLexico.Contador=0
     AnalizadorLexico.titulo=''
     AnalizadorLexico.Celdas.clear()
-
+    AnalizadorLexico.NImg=1
+    AnalizadorLexico.Filtros.clear()
+    print('nim',NumeroImagenes)
     for i in range(NumeroImagenes):
-        print(AnalizadorLexico.NImg+1)
+        # print(AnalizadorLexico.NImg+1)
         AnalizadorLexico.Celdas.clear()
+        AnalizadorLexico.Filtros.clear()
         scanner = AnalizadorLexico()
-        cadena = Leer()
+        # cadena = Leer()
         scanner.analizar(cadena)
         ListaTitulos.append(AnalizadorLexico.titulo.replace('"',''))
+        print(AnalizadorLexico.titulo)
         GenerarHtml()
+        GenerarImagenes()
+        scanner.RTokens()
+        scanner.Rerrores()
         combo.configure(values=tuple(ListaTitulos))
+        AnalizadorLexico.CambiarImg=True
     # MessageBox.showinfo('MENSAJE', 'ARCHIVO ANALIZADO CON EXITO')
 # except:
     # MessageBox.showinfo('ANALIZAR ARCHIVO', 'ERROR AL ANALIZAR EL ARCHIVO')
@@ -154,9 +171,19 @@ def Analizar():
     
     # ventana(f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\blanco.jpg')
 
+def Reportes():
+    global ListaTitulos
+    Nombre=AnalizadorLexico.titulo.replace('"','')
+    Nombre='Tokens'+Nombre+'.html'
+    for i in range(len(ListaTitulos)):
+        if ListaTitulos[i]==combo.get():
+            os.system(f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\TOKENS{combo.get()}.html')
+            os.system(f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\ERRORES{combo.get()}.html')
+   
+
+    # pass
 
 def GenerarHtml():
-    
     global AnchoCelda, AltoCelda
     # print(int(AnalizadorLexico.vcolumnas))
     AnchoCelda = int(AnalizadorLexico.vancho)/int(AnalizadorLexico.vcolumnas)
@@ -166,7 +193,7 @@ def GenerarHtml():
     try:
         titulo = AnalizadorLexico.titulo.replace('"', '')
         img = titulo+'original.jpg'
-        titulo = '_'+titulo+' original.html'
+        titulo = '_'+titulo+'original.html'
         reporte = open(titulo, 'w')
         reporte.write('<html>')
         reporte.write('     <head>')
@@ -202,8 +229,7 @@ def GenerarHtml():
                     Columna = AnalizadorLexico.Celdas[c3][1]
                     Boolean = AnalizadorLexico.Celdas[c3][2]
                     Color = AnalizadorLexico.Celdas[c3][3]
-                    if AnalizadorLexico.CambiarImg==True and a==0:
-                        print(Fila)
+                    
                         
                     Celda = Columna+Fila
 
@@ -213,7 +239,7 @@ def GenerarHtml():
                             f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
                         pintado = True
                         break
-                a=1
+                
                 if pintado == False:
                     reporte.write(
                         f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
@@ -226,10 +252,11 @@ def GenerarHtml():
 
         reporte.write('</body>')
         reporte.write('</html>')
+        reporte.close()
 
         titulo = AnalizadorLexico.titulo.replace('"', '')
         img = titulo+'MIRRORX.jpg'
-        titulo = '_'+titulo+' MIRRORX.html'
+        titulo = '_'+titulo+'MIRRORX.html'
         reporte = open(titulo, 'w')
         reporte.write('<html>')
         reporte.write('     <head>')
@@ -283,10 +310,11 @@ def GenerarHtml():
         reporte.write('</head>')
         reporte.write('</body>')
         reporte.write('</html>')
+        reporte.close()
 
         titulo = AnalizadorLexico.titulo.replace('"', '')
         img = titulo+'MIRRORY.jpg'
-        titulo = '_'+titulo+' MIRRORY.html'
+        titulo = '_'+titulo+'MIRRORY.html'
         reporte = open(titulo, 'w')
         reporte.write('<html>')
         reporte.write('     <head>')
@@ -339,10 +367,11 @@ def GenerarHtml():
         reporte.write('</head>')
         reporte.write('</body>')
         reporte.write('</html>')
+        reporte.close()
 
         titulo = AnalizadorLexico.titulo.replace('"', '')
         img = titulo+'DOUBLEMIRROR.jpg'
-        titulo = '_'+titulo+' DOUBLEMIRROR.html'
+        titulo = '_'+titulo+'DOUBLEMIRROR.html'
         reporte = open(titulo, 'w')
         reporte.write('<html>')
         reporte.write('     <head>')
@@ -396,50 +425,56 @@ def GenerarHtml():
         reporte.write('</head>')
         reporte.write('</body>')
         reporte.write('</html>')
+        reporte.close()
     except:
         MessageBox.showinfo('HTML IMAGENES', 'ERROR AL GENERAR HTML')
 
 
-def HTML():
+def GenerarImagenes():
+    
     import imgkit
     titulo = AnalizadorLexico.titulo.replace('"', '')
     img = titulo+'original.jpg'
-    titulo = '_'+titulo+' original.html'
-    opciones = {'width': int(AnalizadorLexico.vancho) +
-                150, 'height': int(AnalizadorLexico.valto)+150}
-    config = imgkit.config(
-        wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+    titulo = '_'+titulo+'original.html'
+    opciones = {'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150}
+    config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
     imgkit.from_file(titulo, img, config=config, options=opciones)
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'MIRRORX.jpg'
-    titulo = '_'+titulo+' MIRRORX.html'
-    import imgkit
-    opciones = {'width': int(AnalizadorLexico.vancho) +
-                150, 'height': int(AnalizadorLexico.valto)+150}
-    config = imgkit.config(
-        wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
-    imgkit.from_file(titulo, img, config=config, options=opciones)
+    for i in range(len(AnalizadorLexico.Filtros)):
+        if AnalizadorLexico.Filtros[i]=='MIRRORX':
+            titulo = AnalizadorLexico.titulo.replace('"', '')
+            img = titulo+'MIRRORX.jpg'
+            titulo = '_'+titulo+'MIRRORX.html'
+            import imgkit
+            opciones = {'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150}
+            config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+            imgkit.from_file(titulo, img, config=config, options=opciones) 
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'MIRRORY.jpg'
-    titulo = '_'+titulo+' MIRRORY.html'
-    import imgkit
-    opciones = {'width': int(AnalizadorLexico.vancho) +
-                150, 'height': int(AnalizadorLexico.valto)+150}
-    config = imgkit.config(
-        wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
-    imgkit.from_file(titulo, img, config=config, options=opciones)
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'DOUBLEMIRROR.jpg'
-    titulo = '_'+titulo+' DOUBLEMIRROR.html'
-    import imgkit
-    opciones = {'width': int(AnalizadorLexico.vancho) +
-                150, 'height': int(AnalizadorLexico.valto)+150}
-    config = imgkit.config(
-        wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
-    imgkit.from_file(titulo, img, config=config, options=opciones)
+        elif AnalizadorLexico.Filtros[i]=='MIRRORY':
+            titulo = AnalizadorLexico.titulo.replace('"', '')
+            img = titulo+'MIRRORY.jpg'
+            titulo = '_'+titulo+'MIRRORY.html'
+            import imgkit
+            opciones = {'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150}
+            config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+            imgkit.from_file(titulo, img, config=config, options=opciones)
+
+        elif AnalizadorLexico.Filtros[i]=='DOUBLEMIRROR':
+            titulo = AnalizadorLexico.titulo.replace('"', '')
+            img = titulo+'DOUBLEMIRROR.jpg'
+            titulo = '_'+titulo+'DOUBLEMIRROR.html'
+            import imgkit
+            opciones = {'width': int(AnalizadorLexico.vancho)+150, 'height': int(AnalizadorLexico.valto)+150}
+            config = imgkit.config(wkhtmltoimage=f'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+            imgkit.from_file(titulo, img, config=config, options=opciones)
+        
+
+    
+
+    
+
+   
 
 
 def ventana(img):
@@ -472,7 +507,7 @@ def ventana(img):
     BAnalizar.pack()
     BAnalizar.place(x=122, y=10)
 
-    BReportes = tk.Button(raiz, text="Reportes", command=HTML, height=2,
+    BReportes = tk.Button(raiz, text="Reportes", command=Reportes, height=2,
                           width=15, bg="indigo", fg="white", activebackground="powderblue")
     BReportes.pack()
     BReportes.place(x=232, y=10)

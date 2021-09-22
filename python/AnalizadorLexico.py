@@ -428,12 +428,14 @@ class AnalizadorLexico:
                 
         if caracter =='X':
             self.buffer += caracter
+            AnalizadorLexico.Filtros.append(self.buffer)
             self.agregar_token(self.buffer,'MIRRORX',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
 
         elif caracter =='Y':
             self.buffer += caracter
+            AnalizadorLexico.Filtros.append(self.buffer)
             self.agregar_token(self.buffer,'MIRRORY',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
@@ -578,6 +580,7 @@ class AnalizadorLexico:
                 
         if caracter =='R':
             self.buffer += caracter
+            AnalizadorLexico.Filtros.append(self.buffer)
             self.agregar_token(self.buffer,'DOUBLEMIRROR',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
@@ -1142,8 +1145,11 @@ class AnalizadorLexico:
         self.i = AnalizadorLexico.IndiceCadena
         
 
-        if AnalizadorLexico.CambiarImg==False:    
+        if AnalizadorLexico.CambiarImg==False:   
+            print('self', self.i) 
+            print('a si')
             while self.i < len(cadena):
+                
                 AnalizadorLexico.MultipleImg=False
                 if self.estado == 0:
                     self.estado0(cadena[self.i])
@@ -1206,7 +1212,7 @@ class AnalizadorLexico:
                         print('aqui si')
                         # AnalizadorLexico.NImg=self.i
                         AnalizadorLexico.IndiceCadena=self.i
-                        AnalizadorLexico.CambiarImg=True
+                        # AnalizadorLexico.CambiarImg=True
                         break    
                 elif self.estado == 72:
                     self.estado72(cadena[self.i])
@@ -1281,6 +1287,7 @@ class AnalizadorLexico:
                 self.i += 1
 
         if AnalizadorLexico.CambiarImg==True:
+            print('self uzaz', self.i)
             while self.i < len(cadena):
                 # print('aqui si entra')
                 AnalizadorLexico.MultipleImg=False
@@ -1341,8 +1348,9 @@ class AnalizadorLexico:
                 elif self.estado == 32:
                     self.estado32(cadena[self.i])
                     if AnalizadorLexico.MultipleImg==True:
+                        print('aqui no deberia')
                         self.i+=1
-                        AnalizadorLexico.NImg=self.i
+                        AnalizadorLexico.IndiceCadena=self.i
                         break    
                 elif self.estado == 72:
                     self.estado72(cadena[self.i])
@@ -1502,7 +1510,7 @@ class AnalizadorLexico:
 
             reporte.write('<title>''TOKENS''</title>')
             reporte.write('<body>')
-            reporte.write('<h1 style="text-align: center;">' 'REPORTE DE TOKENS '+AnalizadorLexico.titulo+ '</h1>')
+            reporte.write('<h1 style="text-align: center;">' 'REPORTE DE ERRORES '+AnalizadorLexico.titulo+ '</h1>')
 
             reporte.write('<table style="margin: 0 auto; width:50%">')
             reporte.write('<tr>')
