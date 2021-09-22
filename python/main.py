@@ -25,7 +25,7 @@ def MIRRORY():
     global label
     global combo
     global ListaTitulos
-    print(combo.get())
+    # print(combo.get())
     if combo.get()!='':
         for i in range(len(ListaTitulos)):
             if combo.get()==ListaTitulos[i]:
@@ -46,16 +46,19 @@ def MIRRORX():
     global combo
     global ListaTitulos
     print(combo.get())
-    if combo.get()!='':
-        for i in range(len(ListaTitulos)):
-            if combo.get()==ListaTitulos[i]:
-                ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}MIRRORX.jpg'
-    
-    
-        imagen = ImageTk.PhotoImage(Image.open(ruta))
+    try:
+        if combo.get()!='':
+            for i in range(len(ListaTitulos)):
+                if combo.get()==ListaTitulos[i]:
+                    ruta=f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\{ListaTitulos[i]}MIRRORX.jpg'
         
-        label.configure(image=imagen)
-        label.image=imagen
+        
+            imagen = ImageTk.PhotoImage(Image.open(ruta))
+            
+            label.configure(image=imagen)
+            label.image=imagen
+    except:
+        MessageBox.showinfo('IMAGEN', 'NO SE PUDO CARGAR LA IMAGEN')
 
 def original():
     global raiz
@@ -96,8 +99,11 @@ def DOUBLEMIRROR():
         label.image=imagen
 def Cargar():
     global Ruta
-    Ruta = easygui.fileopenbox()  # Esto nos poermite guardar ka ruta del archivo
-
+    try:
+        Ruta = easygui.fileopenbox()  # Esto nos poermite guardar ka ruta del archivo
+        MessageBox.showinfo('CARGAR ARCHIVO', 'EL ARCHIVO FUE CARGADO')
+    except:
+        MessageBox.showinfo('CARGAR ARCHIVO', 'OCURRIO UN ERROR AL CARGAR EL ARCHIVO')
 
 def Leer():
     global archivo
@@ -113,24 +119,39 @@ def Analizar():
     global ListaTitulos
     global combo
     # MessageBox.showinfo("Hola!", "Hola mundo")
-
+    # try:
     scanner = AnalizadorLexico()
     cadena = Leer()
-    AnalizadorLexico.Celdas.clear()
     scanner.analizar(cadena)
-    ListaTitulos.append(AnalizadorLexico.titulo.replace('"',''))
-    # scanner.impTokens()
-    # scanner.impErrores()
-    # print(AnalizadorLexico.Celdas)
-    # print(len(AnalizadorLexico.Celdas))
-    for c3 in range(len(AnalizadorLexico.Celdas)):
-        Fila = AnalizadorLexico.Celdas[c3][0]
-        Columna = AnalizadorLexico.Celdas[c3][1]
-        Celda = Fila+Columna
-    scanner.RTokens()
+    NumeroImagenes=AnalizadorLexico.NImg
+    AnalizadorLexico.IndiceCadena=0
+    AnalizadorLexico.CambiarImg=False
+    AnalizadorLexico.MultipleImg=False
+    AnalizadorLexico.Contador=0
+    AnalizadorLexico.titulo=''
+    AnalizadorLexico.Celdas.clear()
 
-    GenerarHtml()
-    combo.configure(values=tuple(ListaTitulos))
+    for i in range(NumeroImagenes):
+        print(AnalizadorLexico.NImg+1)
+        AnalizadorLexico.Celdas.clear()
+        scanner = AnalizadorLexico()
+        cadena = Leer()
+        scanner.analizar(cadena)
+        ListaTitulos.append(AnalizadorLexico.titulo.replace('"',''))
+        GenerarHtml()
+        combo.configure(values=tuple(ListaTitulos))
+    # MessageBox.showinfo('MENSAJE', 'ARCHIVO ANALIZADO CON EXITO')
+# except:
+    # MessageBox.showinfo('ANALIZAR ARCHIVO', 'ERROR AL ANALIZAR EL ARCHIVO')
+# scanner.impTokens()
+# scanner.impErrores()
+# print(AnalizadorLexico.Celdas)
+# print(len(AnalizadorLexico.Celdas))
+
+# scanner.RTokens()
+# scanner.Rerrores()
+
+    
     # ventana(f'C:\\Users\\16-a0001la\\OneDrive\\Desktop\\2do.Semestre2021\\LENGUAJESFORMALES\\Lab\\Proyecto1\\blanco.jpg')
 
 
@@ -142,234 +163,241 @@ def GenerarHtml():
     AltoCelda = int(AnalizadorLexico.valto)/int(AnalizadorLexico.vfilas)
     # print(AnchoCelda)
     # print(AltoCelda)
+    try:
+        titulo = AnalizadorLexico.titulo.replace('"', '')
+        img = titulo+'original.jpg'
+        titulo = '_'+titulo+' original.html'
+        reporte = open(titulo, 'w')
+        reporte.write('<html>')
+        reporte.write('     <head>')
+        reporte.write('<style type="text/css">')
+        reporte.write('table, th, td {')
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'original.jpg'
-    titulo = '_'+titulo+' original.html'
-    reporte = open(titulo, 'w')
-    reporte.write('<html>')
-    reporte.write('     <head>')
-    reporte.write('<style type="text/css">')
-    reporte.write('table, th, td {')
+        reporte.write('border: 1px solid black;')
+        reporte.write('border-collapse: collapse;;')
+        reporte.write('}')
+        reporte.write('</style>')
 
-    reporte.write('border: 1px solid black;')
-    reporte.write('border-collapse: collapse;;')
-    reporte.write('}')
-    reporte.write('</style>')
+        reporte.write('<title>''REPORTE''</title>')
+        reporte.write('<body>')
 
-    reporte.write('<title>''REPORTE''</title>')
-    reporte.write('<body>')
+        reporte.write('<h1 style="text-align: center;">' +
+                    AnalizadorLexico.titulo + '</h1>')
 
-    reporte.write('<h1 style="text-align: center;">' +
-                  AnalizadorLexico.titulo + '</h1>')
+        reporte.write(f'<table style="margin: 0 auto;">')
 
-    reporte.write(f'<table style="margin: 0 auto;">')
+        # reporte.write(`<table style="margin: 0 auto; width: ">`)
 
-    # reporte.write(`<table style="margin: 0 auto; width: ">`)
-
-    PosicionFila = 0
-    PosicionColumna = 0
-    for c in range(int(AnalizadorLexico.vfilas)):
-        reporte.write('<tr>')
-        for c2 in range(int(AnalizadorLexico.vcolumnas)):
-            pintado = False
-            PosicionCelda = str(PosicionColumna)+str(PosicionFila)
-
-            for c3 in range(len(AnalizadorLexico.Celdas)):
-                Fila = AnalizadorLexico.Celdas[c3][0]
-                Columna = AnalizadorLexico.Celdas[c3][1]
-                Boolean = AnalizadorLexico.Celdas[c3][2]
-                Color = AnalizadorLexico.Celdas[c3][3]
-                Celda = Columna+Fila
-
-                if Celda == PosicionCelda and Boolean == 'TRUE':
-
-                    reporte.write(
-                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
-                    pintado = True
-                    break
-            if pintado == False:
-                reporte.write(
-                    f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
-
-            PosicionFila += 1
-        reporte.write('</tr>')
-        PosicionColumna += 1
         PosicionFila = 0
-    reporte.write('</table>')
+        PosicionColumna = 0
+        a=0
+        for c in range(int(AnalizadorLexico.vfilas)):
+            reporte.write('<tr>')
+            for c2 in range(int(AnalizadorLexico.vcolumnas)):
+                pintado = False
+                PosicionCelda = str(PosicionColumna)+str(PosicionFila)
 
-    reporte.write('</body>')
-    reporte.write('</html>')
+                for c3 in range(len(AnalizadorLexico.Celdas)):
+                    Fila = AnalizadorLexico.Celdas[c3][0]
+                    Columna = AnalizadorLexico.Celdas[c3][1]
+                    Boolean = AnalizadorLexico.Celdas[c3][2]
+                    Color = AnalizadorLexico.Celdas[c3][3]
+                    if AnalizadorLexico.CambiarImg==True and a==0:
+                        print(Fila)
+                        
+                    Celda = Columna+Fila
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'MIRRORX.jpg'
-    titulo = '_'+titulo+' MIRRORX.html'
-    reporte = open(titulo, 'w')
-    reporte.write('<html>')
-    reporte.write('     <head>')
-    reporte.write('<style type="text/css">')
-    reporte.write('table, th, td {')
+                    if Celda == PosicionCelda and Boolean == 'TRUE':
 
-    reporte.write('border: 1px solid black;')
-    reporte.write('border-collapse: collapse;;')
-    reporte.write('}')
-    reporte.write('</style>')
-
-    reporte.write('<title>''REPORTE''</title>')
-    reporte.write('<body>')
-    reporte.write('<h1 style="text-align: center;">' 'MIRROR X' '</h1>')
-
-    reporte.write(f'<table style="margin: 0 auto;">')
-
-    PosicionFila = int(AnalizadorLexico.vfilas)-1
-    PosicionColumna = 0
-    print(len(AnalizadorLexico.Celdas))
-
-    for c in range(int(AnalizadorLexico.vfilas)):
-        reporte.write('<tr>')
-        for c2 in range(int(AnalizadorLexico.vcolumnas)):
-            pintado = False
-            PosicionCelda = str(PosicionColumna)+str(PosicionFila)
-
-            for c3 in range(len(AnalizadorLexico.Celdas)):
-                Fila = AnalizadorLexico.Celdas[c3][0]
-                Columna = AnalizadorLexico.Celdas[c3][1]
-                Boolean = AnalizadorLexico.Celdas[c3][2]
-                Color = AnalizadorLexico.Celdas[c3][3]
-                Celda = Columna+Fila
-                if Celda == PosicionCelda and Boolean == 'TRUE':
-
+                        reporte.write(
+                            f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
+                        pintado = True
+                        break
+                a=1
+                if pintado == False:
                     reporte.write(
-                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
-                    pintado = True
-                    break
-            if pintado == False:
-                reporte.write(
-                    f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
+                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
 
-            PosicionFila -= 1
-        reporte.write('</tr>')
-        PosicionColumna += 1
+                PosicionFila += 1
+            reporte.write('</tr>')
+            PosicionColumna += 1
+            PosicionFila = 0
+        reporte.write('</table>')
+
+        reporte.write('</body>')
+        reporte.write('</html>')
+
+        titulo = AnalizadorLexico.titulo.replace('"', '')
+        img = titulo+'MIRRORX.jpg'
+        titulo = '_'+titulo+' MIRRORX.html'
+        reporte = open(titulo, 'w')
+        reporte.write('<html>')
+        reporte.write('     <head>')
+        reporte.write('<style type="text/css">')
+        reporte.write('table, th, td {')
+
+        reporte.write('border: 1px solid black;')
+        reporte.write('border-collapse: collapse;;')
+        reporte.write('}')
+        reporte.write('</style>')
+
+        reporte.write('<title>''REPORTE''</title>')
+        reporte.write('<body>')
+        reporte.write('<h1 style="text-align: center;">' 'MIRROR X' '</h1>')
+
+        reporte.write(f'<table style="margin: 0 auto;">')
+
         PosicionFila = int(AnalizadorLexico.vfilas)-1
+        PosicionColumna = 0
+        # print(len(AnalizadorLexico.Celdas))
 
-    reporte.write('</table>')
+        for c in range(int(AnalizadorLexico.vfilas)):
+            reporte.write('<tr>')
+            for c2 in range(int(AnalizadorLexico.vcolumnas)):
+                pintado = False
+                PosicionCelda = str(PosicionColumna)+str(PosicionFila)
 
-    reporte.write('</head>')
-    reporte.write('</body>')
-    reporte.write('</html>')
+                for c3 in range(len(AnalizadorLexico.Celdas)):
+                    Fila = AnalizadorLexico.Celdas[c3][0]
+                    Columna = AnalizadorLexico.Celdas[c3][1]
+                    Boolean = AnalizadorLexico.Celdas[c3][2]
+                    Color = AnalizadorLexico.Celdas[c3][3]
+                    Celda = Columna+Fila
+                    if Celda == PosicionCelda and Boolean == 'TRUE':
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'MIRRORY.jpg'
-    titulo = '_'+titulo+' MIRRORY.html'
-    reporte = open(titulo, 'w')
-    reporte.write('<html>')
-    reporte.write('     <head>')
-    reporte.write('<style type="text/css">')
-    reporte.write('table, th, td {')
-
-    reporte.write('border: 1px solid black;')
-    reporte.write('border-collapse: collapse;;')
-    reporte.write('}')
-    reporte.write('</style>')
-
-    reporte.write('<title>''REPORTE''</title>')
-    reporte.write('<body>')
-    reporte.write('<h1 style="text-align: center;">' 'MIRROR Y' '</h1>')
-
-    reporte.write(f'<table style="margin: 0 auto;">')
-
-    PosicionFila = 0
-    PosicionColumna = int(AnalizadorLexico.vcolumnas)-1
-    print(len(AnalizadorLexico.Celdas))
-
-    for c in range(int(AnalizadorLexico.vfilas)):
-        reporte.write('<tr>')
-        for c2 in range(int(AnalizadorLexico.vcolumnas)):
-            pintado = False
-            PosicionCelda = str(PosicionColumna)+str(PosicionFila)
-
-            for c3 in range(len(AnalizadorLexico.Celdas)):
-                Fila = AnalizadorLexico.Celdas[c3][0]
-                Columna = AnalizadorLexico.Celdas[c3][1]
-                Boolean = AnalizadorLexico.Celdas[c3][2]
-                Color = AnalizadorLexico.Celdas[c3][3]
-                Celda = Columna+Fila
-                if Celda == PosicionCelda and Boolean == 'TRUE':
-
+                        reporte.write(
+                            f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
+                        pintado = True
+                        break
+                if pintado == False:
                     reporte.write(
-                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
-                    pintado = True
-                    break
-            if pintado == False:
-                reporte.write(
-                    f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
+                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
 
-            PosicionFila += 1
-        reporte.write('</tr>')
-        PosicionColumna -= 1
+                PosicionFila -= 1
+            reporte.write('</tr>')
+            PosicionColumna += 1
+            PosicionFila = int(AnalizadorLexico.vfilas)-1
+
+        reporte.write('</table>')
+
+        reporte.write('</head>')
+        reporte.write('</body>')
+        reporte.write('</html>')
+
+        titulo = AnalizadorLexico.titulo.replace('"', '')
+        img = titulo+'MIRRORY.jpg'
+        titulo = '_'+titulo+' MIRRORY.html'
+        reporte = open(titulo, 'w')
+        reporte.write('<html>')
+        reporte.write('     <head>')
+        reporte.write('<style type="text/css">')
+        reporte.write('table, th, td {')
+
+        reporte.write('border: 1px solid black;')
+        reporte.write('border-collapse: collapse;;')
+        reporte.write('}')
+        reporte.write('</style>')
+
+        reporte.write('<title>''REPORTE''</title>')
+        reporte.write('<body>')
+        reporte.write('<h1 style="text-align: center;">' 'MIRROR Y' '</h1>')
+
+        reporte.write(f'<table style="margin: 0 auto;">')
+
         PosicionFila = 0
+        PosicionColumna = int(AnalizadorLexico.vcolumnas)-1
+        # print(len(AnalizadorLexico.Celdas))
 
-    reporte.write('</table>')
-    reporte.write('</head>')
-    reporte.write('</body>')
-    reporte.write('</html>')
+        for c in range(int(AnalizadorLexico.vfilas)):
+            reporte.write('<tr>')
+            for c2 in range(int(AnalizadorLexico.vcolumnas)):
+                pintado = False
+                PosicionCelda = str(PosicionColumna)+str(PosicionFila)
 
-    titulo = AnalizadorLexico.titulo.replace('"', '')
-    img = titulo+'DOUBLEMIRROR.jpg'
-    titulo = '_'+titulo+' DOUBLEMIRROR.html'
-    reporte = open(titulo, 'w')
-    reporte.write('<html>')
-    reporte.write('     <head>')
-    reporte.write('<style type="text/css">')
-    reporte.write('table, th, td {')
+                for c3 in range(len(AnalizadorLexico.Celdas)):
+                    Fila = AnalizadorLexico.Celdas[c3][0]
+                    Columna = AnalizadorLexico.Celdas[c3][1]
+                    Boolean = AnalizadorLexico.Celdas[c3][2]
+                    Color = AnalizadorLexico.Celdas[c3][3]
+                    Celda = Columna+Fila
+                    if Celda == PosicionCelda and Boolean == 'TRUE':
 
-    reporte.write('border: 1px solid black;')
-    reporte.write('border-collapse: collapse;;')
-    reporte.write('}')
-    reporte.write('</style>')
-
-    reporte.write('<title>''REPORTE''</title>')
-    reporte.write('<body>')
-    reporte.write('<h1 style="text-align: center;">' 'DOUBLE MIRROR' '</h1>')
-
-    reporte.write(f'<table style="margin: 0 auto;">')
-
-    PosicionFila = int(AnalizadorLexico.vfilas)-1
-    PosicionColumna = int(AnalizadorLexico.vcolumnas)-1
-    print(len(AnalizadorLexico.Celdas))
-
-    for c in range(int(AnalizadorLexico.vfilas)):
-        reporte.write('<tr>')
-        for c2 in range(int(AnalizadorLexico.vcolumnas)):
-            pintado = False
-            PosicionCelda = str(PosicionColumna)+str(PosicionFila)
-
-            for c3 in range(len(AnalizadorLexico.Celdas)):
-                Fila = AnalizadorLexico.Celdas[c3][0]
-                Columna = AnalizadorLexico.Celdas[c3][1]
-                Boolean = AnalizadorLexico.Celdas[c3][2]
-                Color = AnalizadorLexico.Celdas[c3][3]
-                Celda = Columna+Fila
-                if Celda == PosicionCelda and Boolean == 'TRUE':
-
+                        reporte.write(
+                            f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
+                        pintado = True
+                        break
+                if pintado == False:
                     reporte.write(
-                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
-                    pintado = True
-                    break
-            if pintado == False:
-                reporte.write(
-                    f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
+                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
 
-            PosicionFila -= 1
-        reporte.write('</tr>')
-        PosicionColumna -= 1
+                PosicionFila += 1
+            reporte.write('</tr>')
+            PosicionColumna -= 1
+            PosicionFila = 0
+
+        reporte.write('</table>')
+        reporte.write('</head>')
+        reporte.write('</body>')
+        reporte.write('</html>')
+
+        titulo = AnalizadorLexico.titulo.replace('"', '')
+        img = titulo+'DOUBLEMIRROR.jpg'
+        titulo = '_'+titulo+' DOUBLEMIRROR.html'
+        reporte = open(titulo, 'w')
+        reporte.write('<html>')
+        reporte.write('     <head>')
+        reporte.write('<style type="text/css">')
+        reporte.write('table, th, td {')
+
+        reporte.write('border: 1px solid black;')
+        reporte.write('border-collapse: collapse;;')
+        reporte.write('}')
+        reporte.write('</style>')
+
+        reporte.write('<title>''REPORTE''</title>')
+        reporte.write('<body>')
+        reporte.write('<h1 style="text-align: center;">' 'DOUBLE MIRROR' '</h1>')
+
+        reporte.write(f'<table style="margin: 0 auto;">')
+
         PosicionFila = int(AnalizadorLexico.vfilas)-1
+        PosicionColumna = int(AnalizadorLexico.vcolumnas)-1
+        # print(len(AnalizadorLexico.Celdas))
 
-    reporte.write('</table>')
+        for c in range(int(AnalizadorLexico.vfilas)):
+            reporte.write('<tr>')
+            for c2 in range(int(AnalizadorLexico.vcolumnas)):
+                pintado = False
+                PosicionCelda = str(PosicionColumna)+str(PosicionFila)
 
-    reporte.write('</head>')
-    reporte.write('</body>')
-    reporte.write('</html>')
+                for c3 in range(len(AnalizadorLexico.Celdas)):
+                    Fila = AnalizadorLexico.Celdas[c3][0]
+                    Columna = AnalizadorLexico.Celdas[c3][1]
+                    Boolean = AnalizadorLexico.Celdas[c3][2]
+                    Color = AnalizadorLexico.Celdas[c3][3]
+                    Celda = Columna+Fila
+                    if Celda == PosicionCelda and Boolean == 'TRUE':
+
+                        reporte.write(
+                            f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px" style="background-color: {Color};">'  '</td>')
+                        pintado = True
+                        break
+                if pintado == False:
+                    reporte.write(
+                        f'<td id={PosicionCelda} width="{AnchoCelda}px" height="{AltoCelda}px">'  '</td>')
+
+                PosicionFila -= 1
+            reporte.write('</tr>')
+            PosicionColumna -= 1
+            PosicionFila = int(AnalizadorLexico.vfilas)-1
+
+        reporte.write('</table>')
+
+        reporte.write('</head>')
+        reporte.write('</body>')
+        reporte.write('</html>')
+    except:
+        MessageBox.showinfo('HTML IMAGENES', 'ERROR AL GENERAR HTML')
 
 
 def HTML():

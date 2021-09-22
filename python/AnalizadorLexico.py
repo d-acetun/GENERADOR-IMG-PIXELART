@@ -4,6 +4,7 @@ from Token import Token
 from Error import Error
 from prettytable import PrettyTable
 from Funciones import *
+from tkinter import messagebox as MessageBox
 token_color=[]
 contador_color=0
 btitulo = False
@@ -13,13 +14,16 @@ bceldas = False
 cel=0; col=0; boo=False; color=0 #cel representa filas
 ContadorCol=0
 
-
 for a in range(48,58):
     token_color.append(chr(a))
 for a in range(65,71):
     token_color.append(chr(a))
 
 class AnalizadorLexico:
+    NImg=1
+    IndiceCadena=0
+    CambiarImg=False
+    MultipleImg=False
     vancho=0
     valto=0
     vfilas=0
@@ -331,11 +335,15 @@ class AnalizadorLexico:
 
         if caracter in token_color:
             self.buffer += caracter
+            # if AnalizadorLexico.CambiarImg==True:
+            #     print(self.buffer)
+
             if bceldas==True:
                 color = self.buffer
             self.agregar_token(self.buffer,'color',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+            
             
             
 
@@ -613,6 +621,8 @@ class AnalizadorLexico:
             self.agregar_token(self.buffer,'Separador de imagenes',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
+            AnalizadorLexico.NImg+=1
+            AnalizadorLexico.MultipleImg=True
         else:
             self.buffer += caracter
             self.agregar_error(self.buffer,self.linea,self.columna)
@@ -1129,136 +1139,282 @@ class AnalizadorLexico:
 
 
         #recorrer caracter por caracter
-        self.i = 0
-        while self.i < len(cadena):
-            if self.estado == 0:
-                self.estado0(cadena[self.i])
-            elif self.estado == 1:
-                self.estado1(cadena[self.i])
-            elif self.estado == 3:
-                self.estado3(cadena[self.i])
-            elif self.estado == 4:
-                self.estado4(cadena[self.i])
-            elif self.estado == 5:
-                self.estado5(cadena[self.i])   
-            elif self.estado == 6:
-                self.estado6(cadena[self.i]) 
-            elif self.estado == 7:
-                self.estado7(cadena[self.i])
-            elif self.estado == 8:
-                self.estado8(cadena[self.i])
-            elif self.estado == 10:
-                self.estado10(cadena[self.i])
-            elif self.estado == 11:
-                self.estado11(cadena[self.i])
-            elif self.estado == 12:
-                self.estado12(cadena[self.i])
-            elif self.estado == 13:
-                self.estado13(cadena[self.i])
-            elif self.estado == 14:
-                self.estado14(cadena[self.i])
-            elif self.estado == 15:
-                self.estado15(cadena[self.i])
-            elif self.estado == 18:
-                    self.estado18(cadena[self.i])
-            elif self.estado == 19:
-                self.estado19(cadena[self.i])
-            elif self.estado == 20:
-                self.estado20(cadena[self.i])
-            elif self.estado == 21:
-                self.estado21(cadena[self.i])
-            elif self.estado == 22:
-                self.estado22(cadena[self.i])
-            elif self.estado == 23:
-                self.estado23(cadena[self.i])
-            elif self.estado == 24:
-                    self.estado24(cadena[self.i])
-            elif self.estado == 25:
-                self.estado25(cadena[self.i])
-            elif self.estado == 26:
-                self.estado26(cadena[self.i])
-            elif self.estado == 27:
-                self.estado27(cadena[self.i])
-            elif self.estado == 28:
-                self.estado28(cadena[self.i])
-            elif self.estado == 30:
-                self.estado30(cadena[self.i])
-            elif self.estado == 31:
-                self.estado31(cadena[self.i])
-            elif self.estado == 32:
-                self.estado32(cadena[self.i])    
-            elif self.estado == 72:
-                self.estado72(cadena[self.i])
-            elif self.estado == 34:
-                self.estado34(cadena[self.i])
-            elif self.estado == 35:
-                self.estado35(cadena[self.i])     
-            elif self.estado == 73:
-                self.estado73(cadena[self.i])
-            elif self.estado == 74:
-                self.estado74(cadena[self.i])
-            elif self.estado == 75:
-                self.estado75(cadena[self.i])     
-            elif self.estado == 76:
-                self.estado76(cadena[self.i])
-            elif self.estado == 70:
-                self.estado70(cadena[self.i])
-            elif self.estado == 40:
-                self.estado40(cadena[self.i])
-            elif self.estado == 41:
-                self.estado41(cadena[self.i])  
-            elif self.estado == 42:
-                self.estado42(cadena[self.i])
-            elif self.estado == 43:
-                self.estado43(cadena[self.i])
-            elif self.estado == 45:
-                self.estado45(cadena[self.i])
-            elif self.estado == 46:
-                self.estado46(cadena[self.i])
-            elif self.estado == 48:
-                self.estado48(cadena[self.i])
-            elif self.estado == 49:
-                self.estado49(cadena[self.i])
-            elif self.estado == 50:
-                self.estado50(cadena[self.i])
-            elif self.estado == 51:
-                self.estado51(cadena[self.i])
-            elif self.estado == 53:
-                self.estado53(cadena[self.i])
-            elif self.estado == 54:
-                self.estado54(cadena[self.i])
-            elif self.estado == 55:
-                self.estado55(cadena[self.i])
-            elif self.estado == 78:
-                self.estado78(cadena[self.i])
-            elif self.estado == 79:
-                self.estado79(cadena[self.i])
-            elif self.estado == 80:
-                self.estado80(cadena[self.i])
-            elif self.estado == 57:
-                self.estado57(cadena[self.i])
-            elif self.estado == 58:
-                self.estado58(cadena[self.i])
-            elif self.estado == 59:
-                self.estado59(cadena[self.i])
-            elif self.estado == 60:
-                self.estado60(cadena[self.i])
-            elif self.estado == 61:
-                self.estado61(cadena[self.i])
-            elif self.estado == 62:
-                self.estado62(cadena[self.i])
-            elif self.estado == 63:
-                self.estado63(cadena[self.i])
-            elif self.estado == 65:
-                self.estado65(cadena[self.i])
-            elif self.estado == 66:
-                self.estado66(cadena[self.i])
-            elif self.estado == 67:
-                self.estado67(cadena[self.i])
-            elif self.estado == 68:
-                self.estado68(cadena[self.i])
-            self.i += 1
-                    
+        self.i = AnalizadorLexico.IndiceCadena
+        
+
+        if AnalizadorLexico.CambiarImg==False:    
+            while self.i < len(cadena):
+                AnalizadorLexico.MultipleImg=False
+                if self.estado == 0:
+                    self.estado0(cadena[self.i])
+                elif self.estado == 1:
+                    self.estado1(cadena[self.i])
+                elif self.estado == 3:
+                    self.estado3(cadena[self.i])
+                elif self.estado == 4:
+                    self.estado4(cadena[self.i])
+                elif self.estado == 5:
+                    self.estado5(cadena[self.i])   
+                elif self.estado == 6:
+                    self.estado6(cadena[self.i]) 
+                elif self.estado == 7:
+                    self.estado7(cadena[self.i])
+                elif self.estado == 8:
+                    self.estado8(cadena[self.i])
+                elif self.estado == 10:
+                    self.estado10(cadena[self.i])
+                elif self.estado == 11:
+                    self.estado11(cadena[self.i])
+                elif self.estado == 12:
+                    self.estado12(cadena[self.i])
+                elif self.estado == 13:
+                    self.estado13(cadena[self.i])
+                elif self.estado == 14:
+                    self.estado14(cadena[self.i])
+                elif self.estado == 15:
+                    self.estado15(cadena[self.i])
+                elif self.estado == 18:
+                        self.estado18(cadena[self.i])
+                elif self.estado == 19:
+                    self.estado19(cadena[self.i])
+                elif self.estado == 20:
+                    self.estado20(cadena[self.i])
+                elif self.estado == 21:
+                    self.estado21(cadena[self.i])
+                elif self.estado == 22:
+                    self.estado22(cadena[self.i])
+                elif self.estado == 23:
+                    self.estado23(cadena[self.i])
+                elif self.estado == 24:
+                        self.estado24(cadena[self.i])
+                elif self.estado == 25:
+                    self.estado25(cadena[self.i])
+                elif self.estado == 26:
+                    self.estado26(cadena[self.i])
+                elif self.estado == 27:
+                    self.estado27(cadena[self.i])
+                elif self.estado == 28:
+                    self.estado28(cadena[self.i])
+                elif self.estado == 30:
+                    self.estado30(cadena[self.i])
+                elif self.estado == 31:
+                    self.estado31(cadena[self.i])
+                elif self.estado == 32:
+                    self.estado32(cadena[self.i])
+                    if AnalizadorLexico.MultipleImg==True:
+                        self.i+=1
+                        print('aqui si')
+                        # AnalizadorLexico.NImg=self.i
+                        AnalizadorLexico.IndiceCadena=self.i
+                        AnalizadorLexico.CambiarImg=True
+                        break    
+                elif self.estado == 72:
+                    self.estado72(cadena[self.i])
+                elif self.estado == 34:
+                    self.estado34(cadena[self.i])
+                elif self.estado == 35:
+                    self.estado35(cadena[self.i])     
+                elif self.estado == 73:
+                    self.estado73(cadena[self.i])
+                elif self.estado == 74:
+                    self.estado74(cadena[self.i])
+                elif self.estado == 75:
+                    self.estado75(cadena[self.i])     
+                elif self.estado == 76:
+                    self.estado76(cadena[self.i])
+                elif self.estado == 70:
+                    self.estado70(cadena[self.i])
+                elif self.estado == 40:
+                    self.estado40(cadena[self.i])
+                elif self.estado == 41:
+                    self.estado41(cadena[self.i])  
+                elif self.estado == 42:
+                    self.estado42(cadena[self.i])
+                elif self.estado == 43:
+                    self.estado43(cadena[self.i])
+                elif self.estado == 45:
+                    self.estado45(cadena[self.i])
+                elif self.estado == 46:
+                    self.estado46(cadena[self.i])
+                elif self.estado == 48:
+                    self.estado48(cadena[self.i])
+                elif self.estado == 49:
+                    self.estado49(cadena[self.i])
+                elif self.estado == 50:
+                    self.estado50(cadena[self.i])
+                elif self.estado == 51:
+                    self.estado51(cadena[self.i])
+                elif self.estado == 53:
+                    self.estado53(cadena[self.i])
+                elif self.estado == 54:
+                    self.estado54(cadena[self.i])
+                elif self.estado == 55:
+                    self.estado55(cadena[self.i])
+                elif self.estado == 78:
+                    self.estado78(cadena[self.i])
+                elif self.estado == 79:
+                    self.estado79(cadena[self.i])
+                elif self.estado == 80:
+                    self.estado80(cadena[self.i])
+                elif self.estado == 57:
+                    self.estado57(cadena[self.i])
+                elif self.estado == 58:
+                    self.estado58(cadena[self.i])
+                elif self.estado == 59:
+                    self.estado59(cadena[self.i])
+                elif self.estado == 60:
+                    self.estado60(cadena[self.i])
+                elif self.estado == 61:
+                    self.estado61(cadena[self.i])
+                elif self.estado == 62:
+                    self.estado62(cadena[self.i])
+                elif self.estado == 63:
+                    self.estado63(cadena[self.i])
+                elif self.estado == 65:
+                    self.estado65(cadena[self.i])
+                elif self.estado == 66:
+                    self.estado66(cadena[self.i])
+                elif self.estado == 67:
+                    self.estado67(cadena[self.i])
+                elif self.estado == 68:
+                    self.estado68(cadena[self.i])
+                self.i += 1
+
+        if AnalizadorLexico.CambiarImg==True:
+            while self.i < len(cadena):
+                # print('aqui si entra')
+                AnalizadorLexico.MultipleImg=False
+                if self.estado == 0:
+                    self.estado0(cadena[self.i])
+                elif self.estado == 1:
+                    self.estado1(cadena[self.i])
+                elif self.estado == 3:
+                    self.estado3(cadena[self.i])
+                elif self.estado == 4:
+                    self.estado4(cadena[self.i])
+                elif self.estado == 5:
+                    self.estado5(cadena[self.i])   
+                elif self.estado == 6:
+                    self.estado6(cadena[self.i]) 
+                elif self.estado == 7:
+                    self.estado7(cadena[self.i])
+                elif self.estado == 8:
+                    self.estado8(cadena[self.i])
+                elif self.estado == 10:
+                    self.estado10(cadena[self.i])
+                elif self.estado == 11:
+                    self.estado11(cadena[self.i])
+                elif self.estado == 12:
+                    self.estado12(cadena[self.i])
+                elif self.estado == 13:
+                    self.estado13(cadena[self.i])
+                elif self.estado == 14:
+                    self.estado14(cadena[self.i])
+                elif self.estado == 15:
+                    self.estado15(cadena[self.i])
+                elif self.estado == 18:
+                        self.estado18(cadena[self.i])
+                elif self.estado == 19:
+                    self.estado19(cadena[self.i])
+                elif self.estado == 20:
+                    self.estado20(cadena[self.i])
+                elif self.estado == 21:
+                    self.estado21(cadena[self.i])
+                elif self.estado == 22:
+                    self.estado22(cadena[self.i])
+                elif self.estado == 23:
+                    self.estado23(cadena[self.i])
+                elif self.estado == 24:
+                        self.estado24(cadena[self.i])
+                elif self.estado == 25:
+                    self.estado25(cadena[self.i])
+                elif self.estado == 26:
+                    self.estado26(cadena[self.i])
+                elif self.estado == 27:
+                    self.estado27(cadena[self.i])
+                elif self.estado == 28:
+                    self.estado28(cadena[self.i])
+                elif self.estado == 30:
+                    self.estado30(cadena[self.i])
+                elif self.estado == 31:
+                    self.estado31(cadena[self.i])
+                elif self.estado == 32:
+                    self.estado32(cadena[self.i])
+                    if AnalizadorLexico.MultipleImg==True:
+                        self.i+=1
+                        AnalizadorLexico.NImg=self.i
+                        break    
+                elif self.estado == 72:
+                    self.estado72(cadena[self.i])
+                elif self.estado == 34:
+                    self.estado34(cadena[self.i])
+                elif self.estado == 35:
+                    self.estado35(cadena[self.i])     
+                elif self.estado == 73:
+                    self.estado73(cadena[self.i])
+                elif self.estado == 74:
+                    self.estado74(cadena[self.i])
+                elif self.estado == 75:
+                    self.estado75(cadena[self.i])     
+                elif self.estado == 76:
+                    self.estado76(cadena[self.i])
+                elif self.estado == 70:
+                    self.estado70(cadena[self.i])
+                elif self.estado == 40:
+                    self.estado40(cadena[self.i])
+                elif self.estado == 41:
+                    self.estado41(cadena[self.i])  
+                elif self.estado == 42:
+                    self.estado42(cadena[self.i])
+                elif self.estado == 43:
+                    self.estado43(cadena[self.i])
+                elif self.estado == 45:
+                    self.estado45(cadena[self.i])
+                elif self.estado == 46:
+                    self.estado46(cadena[self.i])
+                elif self.estado == 48:
+                    self.estado48(cadena[self.i])
+                elif self.estado == 49:
+                    self.estado49(cadena[self.i])
+                elif self.estado == 50:
+                    self.estado50(cadena[self.i])
+                elif self.estado == 51:
+                    self.estado51(cadena[self.i])
+                elif self.estado == 53:
+                    self.estado53(cadena[self.i])
+                elif self.estado == 54:
+                    self.estado54(cadena[self.i])
+                elif self.estado == 55:
+                    self.estado55(cadena[self.i])
+                elif self.estado == 78:
+                    self.estado78(cadena[self.i])
+                elif self.estado == 79:
+                    self.estado79(cadena[self.i])
+                elif self.estado == 80:
+                    self.estado80(cadena[self.i])
+                elif self.estado == 57:
+                    self.estado57(cadena[self.i])
+                elif self.estado == 58:
+                    self.estado58(cadena[self.i])
+                elif self.estado == 59:
+                    self.estado59(cadena[self.i])
+                elif self.estado == 60:
+                    self.estado60(cadena[self.i])
+                elif self.estado == 61:
+                    self.estado61(cadena[self.i])
+                elif self.estado == 62:
+                    self.estado62(cadena[self.i])
+                elif self.estado == 63:
+                    self.estado63(cadena[self.i])
+                elif self.estado == 65:
+                    self.estado65(cadena[self.i])
+                elif self.estado == 66:
+                    self.estado66(cadena[self.i])
+                elif self.estado == 67:
+                    self.estado67(cadena[self.i])
+                elif self.estado == 68:
+                    self.estado68(cadena[self.i])
+                self.i += 1              
 
     def impTokens(self):
         
@@ -1282,45 +1438,96 @@ class AnalizadorLexico:
             print(x)
 
     def RTokens(self):
-        Nombre=AnalizadorLexico.titulo.replace('"','')
-        Nombre='Tokens'+Nombre+'.html'
-        reporte = open(Nombre, 'w')
-        reporte.write('<html>')
-        reporte.write('     <head>')
-        reporte.write('<style type="text/css">')
-        reporte.write('table, th, td {')
+        try:
+            Nombre=AnalizadorLexico.titulo.replace('"','')
+            Nombre='Tokens'+Nombre+'.html'
+            reporte = open(Nombre, 'w')
+            reporte.write('<html>')
+            reporte.write('     <head>')
+            reporte.write('<style type="text/css">')
+            reporte.write('table, th, td {')
 
-        reporte.write('border: 1px solid black;')
-        reporte.write('border-collapse: collapse;;')
-        reporte.write('}')
-        reporte.write('</style>')
+            reporte.write('border: 1px solid black;')
+            reporte.write('border-collapse: collapse;;')
+            reporte.write('}')
+            reporte.write('</style>')
 
-        reporte.write('<title>''TOKENS''</title>')
-        reporte.write('<body>')
-        reporte.write('<h1 style="text-align: center;">' 'REPORTE DE TOKENS '+AnalizadorLexico.titulo+ '</h1>')
+            reporte.write('<title>''TOKENS''</title>')
+            reporte.write('<body>')
+            reporte.write('<h1 style="text-align: center;">' 'REPORTE DE TOKENS '+AnalizadorLexico.titulo+ '</h1>')
 
-        reporte.write('<table style="margin: 0 auto; width:50%">')
-        reporte.write('<tr>')
-        reporte.write('<th>' 'LEXEMA' '</th>')
-        reporte.write('<th>' 'TOKEN' '</th>')
-        reporte.write('<th>' 'FILA' '</th>')
-        reporte.write('<th>' 'COLUMNA' '</th>')
-        reporte.write('</tr>')
-
-        for i in self.listaTokens:
+            reporte.write('<table style="margin: 0 auto; width:50%">')
             reporte.write('<tr>')
-
-            reporte.write('<td>' +i.enviarLexema()+ '</td>')
-            reporte.write('<td>' +i.enviarTipo()+ '</td>')
-            reporte.write('<td>' +str(i.enviarLinea())+ '</td>')
-            reporte.write('<td>' +str(i.enviarColumna())+ '</td>')
-
-
+            reporte.write('<th>' 'LEXEMA' '</th>')
+            reporte.write('<th>' 'TOKEN' '</th>')
+            reporte.write('<th>' 'FILA' '</th>')
+            reporte.write('<th>' 'COLUMNA' '</th>')
             reporte.write('</tr>')
 
-        reporte.write('</table>')
+            for i in self.listaTokens:
+                reporte.write('<tr>')
 
-        reporte.write('</head>')
-        reporte.write('</body>')
-        reporte.write('</html>')
+                reporte.write('<td>' +i.enviarLexema()+ '</td>')
+                reporte.write('<td>' +i.enviarTipo()+ '</td>')
+                reporte.write('<td>' +str(i.enviarLinea())+ '</td>')
+                reporte.write('<td>' +str(i.enviarColumna())+ '</td>')
+
+
+                reporte.write('</tr>')
+
+            reporte.write('</table>')
+
+            reporte.write('</head>')
+            reporte.write('</body>')
+            reporte.write('</html>')
+            MessageBox.showinfo('REPORTE TOKENS', 'REPORTE TOKENS GENERADO')
+        except:
+            MessageBox.showinfo('REPORTE TOKENS', 'ERROR AL GENERAR EL REPORTE DE TOKENS')
+
+    
+    def Rerrores(self):
+        try:
+            Nombre=AnalizadorLexico.titulo.replace('"','')
+            Nombre='Errores'+Nombre+'.html'
+            reporte = open(Nombre, 'w')
+            reporte.write('<html>')
+            reporte.write('     <head>')
+            reporte.write('<style type="text/css">')
+            reporte.write('table, th, td {')
+
+            reporte.write('border: 1px solid black;')
+            reporte.write('border-collapse: collapse;;')
+            reporte.write('}')
+            reporte.write('</style>')
+
+            reporte.write('<title>''TOKENS''</title>')
+            reporte.write('<body>')
+            reporte.write('<h1 style="text-align: center;">' 'REPORTE DE TOKENS '+AnalizadorLexico.titulo+ '</h1>')
+
+            reporte.write('<table style="margin: 0 auto; width:50%">')
+            reporte.write('<tr>')
+            reporte.write('<th>' 'DESCRIPCION' '</th>')
+            reporte.write('<th>' 'FILA' '</th>')
+            reporte.write('<th>' 'COLUMNA' '</th>')
+            reporte.write('</tr>')
+
+            for i in self.listaErrores:
+                reporte.write('<tr>')
+
+                reporte.write('<td>' +i.enviarData()[0]+ '</td>')
+                reporte.write('<td>' +str(i.enviarData()[1])+ '</td>')
+                reporte.write('<td>' +str(i.enviarData()[2])+ '</td>')
+               
+
+
+                reporte.write('</tr>')
+
+            reporte.write('</table>')
+
+            reporte.write('</head>')
+            reporte.write('</body>')
+            reporte.write('</html>')
+            MessageBox.showinfo('REPORTE TOKENS', 'REPORTE DE ERRORES GENERADO')
+        except:
+            MessageBox.showinfo('REPORTE TOKENS', 'ERROR AL GENERAR REPORTE ERRORES')
         
