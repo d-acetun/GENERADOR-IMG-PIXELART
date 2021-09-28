@@ -129,9 +129,12 @@ def Analizar():
     global combo
     # MessageBox.showinfo("Hola!", "Hola mundo")
     # try:
+    #Aqui lo que hago es analizar primero el archivo para saber cuantas img's hay y depues 
+    #reinciar todas las variables y listas
     scanner = AnalizadorLexico()
     cadena = Leer()
     scanner.analizar(cadena)
+    NumeroImagenes=0
     NumeroImagenes=AnalizadorLexico.NImg
     AnalizadorLexico.IndiceCadena=0
     AnalizadorLexico.CambiarImg=False
@@ -157,6 +160,7 @@ def Analizar():
         scanner.Rerrores()
         combo.configure(values=tuple(ListaTitulos))
         AnalizadorLexico.CambiarImg=True
+        AnalizadorLexico.NImg=1
     # MessageBox.showinfo('MENSAJE', 'ARCHIVO ANALIZADO CON EXITO')
 # except:
     # MessageBox.showinfo('ANALIZAR ARCHIVO', 'ERROR AL ANALIZAR EL ARCHIVO')

@@ -670,7 +670,7 @@ class AnalizadorLexico:
             self.buffer += caracter
             if bceldas==True:
                 boo = self.buffer
-            self.agregar_token(self.buffer,'BOLEANO',self.linea,self.columna)
+            self.agregar_token(self.buffer,'BOOLEANO',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
 
@@ -797,7 +797,7 @@ class AnalizadorLexico:
         global bancho        
         if caracter =='O':
             self.buffer += caracter
-            self.agregar_token(self.buffer,'PALABRA RESERVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'ANCHO',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
             bancho=True
@@ -825,7 +825,7 @@ class AnalizadorLexico:
                 
         if caracter =='O':
             self.buffer += caracter
-            self.agregar_token(self.buffer,'PALABRA RESERVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'ALTO',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
         else:
@@ -887,7 +887,7 @@ class AnalizadorLexico:
                 
         if caracter =='S':
             self.buffer += caracter
-            self.agregar_token(self.buffer,'PALABRA RESERVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'FILAS',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
         else:
@@ -928,7 +928,7 @@ class AnalizadorLexico:
                 
         if caracter =='S':
             self.buffer += caracter
-            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'FILTROS',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
         else:
@@ -972,7 +972,7 @@ class AnalizadorLexico:
             self.buffer += caracter
             if bceldas==True:
                 boo = self.buffer
-            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'BOOLEANO',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
             
@@ -1070,7 +1070,7 @@ class AnalizadorLexico:
                 
         if caracter =='S':
             self.buffer += caracter
-            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'COLUMNAS',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
         else:
@@ -1123,7 +1123,7 @@ class AnalizadorLexico:
                 
         if caracter =='S':
             self.buffer += caracter
-            self.agregar_token(self.buffer,'PALABRA RESRVADA',self.linea,self.columna)
+            self.agregar_token(self.buffer,'CELDAS',self.linea,self.columna)
             self.estado = 0
             self.columna+=1
         else:

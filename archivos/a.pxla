@@ -117,12 +117,12 @@ TITULO="Pokeball";?X
 			[9,8,TRUE,#CDCDCD]
 			[10,8,TRUE,#000000]
 		};
-        FILTROS = MIRRORX,MIRRORY;
+        FILTROS = MIRRORX,MIRRORY,DOUBLEMIRROR;
 
 		@@@@
 
-TITULO="Hongo";
-        ANCHO=320;!W
+		TITULO="Hongo";
+        ANCHO=320;
         ALTO=320;
         FILAS=16;
         COLUMNAS=16;
@@ -254,4 +254,6 @@ TITULO="Hongo";
 			[10,5,TRUE,#00FF00]
 		};
         FILTROS = MIRRORX;
+
+		
 		
